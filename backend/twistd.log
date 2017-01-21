@@ -1,0 +1,25 @@
+2017-01-21T16:11:45+0800 [twisted.scripts._twistd_unix.UnixAppLogger#info] twistd 16.2.0 (/usr/bin/python 2.7.12) starting up.
+2017-01-21T16:11:45+0800 [twisted.scripts._twistd_unix.UnixAppLogger#info] reactor class: twisted.internet.epollreactor.EPollReactor.
+2017-01-21T16:11:45+0800 [stderr#error] Traceback (most recent call last):
+2017-01-21T16:11:45+0800 [stderr#error]   File "/usr/local/bin/twistd", line 18, in <module>
+2017-01-21T16:11:45+0800 [stderr#error]     run()
+2017-01-21T16:11:45+0800 [stderr#error]   File "/usr/local/lib/python2.7/dist-packages/twisted/scripts/twistd.py", line 29, in run
+2017-01-21T16:11:45+0800 [stderr#error]     app.run(runApp, ServerOptions)
+2017-01-21T16:11:45+0800 [stderr#error]   File "/usr/local/lib/python2.7/dist-packages/twisted/application/app.py", line 643, in run
+2017-01-21T16:11:45+0800 [stderr#error]     runApp(config)
+2017-01-21T16:11:45+0800 [stderr#error]   File "/usr/local/lib/python2.7/dist-packages/twisted/scripts/twistd.py", line 25, in runApp
+2017-01-21T16:11:45+0800 [stderr#error]     _SomeApplicationRunner(config).run()
+2017-01-21T16:11:45+0800 [stderr#error]   File "/usr/local/lib/python2.7/dist-packages/twisted/application/app.py", line 378, in run
+2017-01-21T16:11:45+0800 [stderr#error]     self.postApplication()
+2017-01-21T16:11:45+0800 [stderr#error]   File "/usr/local/lib/python2.7/dist-packages/twisted/scripts/_twistd_unix.py", line 207, in postApplication
+2017-01-21T16:11:45+0800 [stderr#error]     self.startApplication(self.application)
+2017-01-21T16:11:45+0800 [stderr#error]   File "/usr/local/lib/python2.7/dist-packages/twisted/scripts/_twistd_unix.py", line 394, in startApplication
+2017-01-21T16:11:45+0800 [stderr#error]     service.IService(application).privilegedStartService()
+2017-01-21T16:11:45+0800 [stderr#error]   File "/usr/local/lib/python2.7/dist-packages/twisted/application/service.py", line 278, in privilegedStartService
+2017-01-21T16:11:45+0800 [stderr#error]     service.privilegedStartService()
+2017-01-21T16:11:45+0800 [stderr#error]   File "/usr/local/lib/python2.7/dist-packages/twisted/application/service.py", line 278, in privilegedStartService
+2017-01-21T16:11:45+0800 [stderr#error]     service.privilegedStartService()
+2017-01-21T16:11:45+0800 [stderr#error]   File "/usr/local/lib/python2.7/dist-packages/twisted/application/internet.py", line 368, in privilegedStartService
+2017-01-21T16:11:45+0800 [stderr#error]     raisedNow[0].raiseException()
+2017-01-21T16:11:45+0800 [stderr#error]   File "<string>", line 2, in raiseException
+2017-01-21T16:11:45+0800 [stderr#error] socket.error: [Errno 98] Address already in use
