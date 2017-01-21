@@ -2,7 +2,7 @@
 <div align="center" class="container-fluid" ng-style="{'background-image': 'url(' + image + ')'}" style="height:450px; width: 1000px">
 	<div class="row-fluid" ng-hide='hideform'>
 		<input ng-model="money" placeholder="15000 SGD" class='input-lg centering' style="width:500px;" required>
-		<button ng-click="hideform=true; bymoney(money);" class='btn-lg btn-primary centering'><i class="fa fa-search"></i></button>
+		<button ng-click="hideform=true; bymoney(money, country);" class='btn-lg btn-primary centering'><i class="fa fa-search"></i></button>
 
 		<br>
 		<br>

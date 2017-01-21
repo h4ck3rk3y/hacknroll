@@ -95,7 +95,7 @@ function SearchController($scope, Search, $window, $timeout){
         });
     }
 
-    $scope.bymoney = function(money) {
+    $scope.bymoney = function(money, country) {
 		Search.post({money: money, location: $scope.position, country: country}, function(data) {
 			$window.location = '/result/' + data.id;
 		});

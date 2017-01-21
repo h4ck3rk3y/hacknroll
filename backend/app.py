@@ -29,13 +29,13 @@ def make_trip(location, money, country):
 
 	job = get_current_job()
 
-	price, first_dest, route = pick_cities(location, float(money), job)
+	price, first_dest, route = pick_cities(location, float(money), job, country)
 	parsed_location = Geocoder(goo_key()).geocode(location)
 
 	if first_dest:
 		location_flight = Geocoder(goo_key()).geocode(first_dest)[0]
 
-	places = go_nearby(parsed_location[0], location_flight, price, [], job, route)
+	places = go_nearby(parsed_location[0], location_flight, price, [], job, country, route)
 	nearest_airport =dst_iata = getNearestAirport(parsed_location.latitude, parsed_location.longitude)['iata']
 
 	return {
@@ -64,8 +64,8 @@ def analyzer_api():
 		location = request_data['location']
 
 		country = None
-		if 'country' in request_data and request['country']:
-			country = countries[request_data['country']]
+		if 'country' in request_data and request_data['country']:
+			country = request_data['country']
 
 		q = queues[(qid+1)%9]
 		qid+=1
@@ -73,6 +73,7 @@ def analyzer_api():
 		job.meta['current'] = 'Just Started'
 		job.meta['phase'] = 'started'
 		job.meta['money-left'] = money
+		job.meta['country'] = country
 		job.save()
 		data = {}
 		data['location'] = location

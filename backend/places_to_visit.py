@@ -89,7 +89,7 @@ def getDays(city,country, budget):
     return f, budget, days, cost_per_day, photo
 
 
-def getNextCity(lat, lon, country, visited_cities, sameCountry=True):
+def getNextCity(lat, lon, country, visited_cities, country_input, sameCountry=True):
     nearest_city = None
     nearest_measure = 320000
     country_changed = country
@@ -102,7 +102,7 @@ def getNextCity(lat, lon, country, visited_cities, sameCountry=True):
             if distance < nearest_measure:
                 nearest_measure = distance
                 nearest_city = city_temp
-    if nearest_city is None:
+    if nearest_city is None and not country_input:
         nearest_city = None
         nearest_measure = 320000
         for country_temp in cityson:
@@ -154,7 +154,7 @@ def rome2rio(city_1, city_2, budget):
 #multiple appends of visited_cities
 # budget 0 pe crash?
 # add initial plane route
-def go_nearby(starting_city, flew_to, price, visited_cities, job, initial_route=[]):
+def go_nearby(starting_city, flew_to, price, visited_cities, job, country_input, initial_route=[]):
     iata = getNearestAirport(starting_city.latitude, starting_city.longitude)
     scity = Geocoder(goo_key()).geocode(str(iata['lat']) + "," +  str(iata['lon'])).city
     if flew_to.city is None:
@@ -176,7 +176,7 @@ def go_nearby(starting_city, flew_to, price, visited_cities, job, initial_route=
 
     while price > 0:
 
-        city, curr_country = getNextCity(present_city.latitude, present_city.longitude, present_city.country, visited_cities)
+        city, curr_country = getNextCity(present_city.latitude, present_city.longitude, present_city.country, visited_cities, country_input)
 
         job.meta['from'] = present_city.city
         job.meta['current'] = city
@@ -185,6 +185,9 @@ def go_nearby(starting_city, flew_to, price, visited_cities, job, initial_route=
         job.save()
 
         if city is None:
+            if prev_route:
+                visited_in_city.append({'return': True, 'price_of_travel': prev_route['indicativePrice']['price'], 'mode_of_transport'
+                    : prev_route['name']})
             return visited_in_city
 
         route = rome2rio(present_city.city, city, price)
@@ -282,7 +285,7 @@ def get_min_fare(source, destination, token):
 
 
 
-def pick_cities(origin, price, job):
+def pick_cities(origin, price, job, country_input):
     done_cities =[]
     count = 10
     origin_object = Geocoder(goo_key()).geocode(origin)
@@ -291,6 +294,10 @@ def pick_cities(origin, price, job):
 
     while count!= 0:
         country = random.choice(cities.keys())
+
+        if country_input:
+            country = country_input
+
         city = random.choice(cities[country].keys())
 
         job.meta['current'] = city

@@ -761,3 +761,8 @@
 2017-01-21T18:02:35+0800 [twisted.python.log#info] "127.0.0.1" - - [21/Jan/2017:10:02:34 +0000] "GET /static/fonts/fontawesome-webfont.woff2?v=4.7.0 HTTP/1.1" 200 77160 "http://localhost:8080/static/css/font-awesome.min.css" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.100 Safari/537.36"
 2017-01-21T18:02:35+0800 [twisted.python.log#info] "127.0.0.1" - - [21/Jan/2017:10:02:34 +0000] "GET /favicon.ico HTTP/1.1" 200 432254 "http://localhost:8080/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.100 Safari/537.36"
 2017-01-21T18:02:38+0800 [twisted.python.log#info] "127.0.0.1" - - [21/Jan/2017:10:02:38 +0000] "POST /api/maketrip HTTP/1.1" 500 291 "http://localhost:8080/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.100 Safari/537.36"
+2017-01-21T20:09:11+0800 [-] Removing stale pidfile /home/gyani/programming/angularRR/backend/twistd.pid
+2017-01-21T20:09:11+0800 [twisted.scripts._twistd_unix.UnixAppLogger#info] twistd 16.2.0 (/usr/bin/python 2.7.12) starting up.
+2017-01-21T20:09:11+0800 [twisted.scripts._twistd_unix.UnixAppLogger#info] reactor class: twisted.internet.epollreactor.EPollReactor.
+2017-01-21T20:09:11+0800 [-] Site starting on 8080
+2017-01-21T20:09:11+0800 [twisted.web.server.Site#info] Starting factory <twisted.web.server.Site instance at 0x7fa8baf296c8>
