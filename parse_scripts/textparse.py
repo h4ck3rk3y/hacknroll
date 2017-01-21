@@ -1,13 +1,16 @@
 from bs4 import BeautifulSoup
-#import nltk
-import requests
+import json
+from watson_developer_cloud import AlchemyLanguageV1
 
 # This will come from a global variable or something
-import_text = str("The year kicks off with a bang on 1 Jan and New Year, celebrated in Singapore.")
+import_text = str(
+    "The year kicks off with a bang on 1 Jan and New Year, celebrated in Singapore.")
 url = "http://wikitravel.org/en/Singapore"
 webpage = 'example_webpage.htm'
 
 # A function that parses the information passed from the extension.
+
+
 def get_header(text, url, full_webpage):
     f = open('example_webpage.htm', 'r')
     soup = BeautifulSoup(f, 'html.parser')
@@ -23,33 +26,25 @@ def get_header(text, url, full_webpage):
     for headers in soup.find_all("span", {"class": "mw-headline"}):
         list_of_headers.append(headers.text)
 
+
 def get_country(url):
-    url_request=str("https://gateway-a.watsonplatform.net/calls/url/%sGetAuthors?apikey=AlchemyAPI-2f")
-    #service: AlchemyAPI-2f
-    #credentals: Credentials-1
-    curl -X POST \
-    -d "outputMode=json" \
-    -d "url=http://techcrunch.com/2016/01/29/ibm-watson-weather-company-sale/" \
-    "https://gateway-a.watsonplatform.net/calls/url/%sGetAuthors?apikey=AlchemyAPI-2f"
+    list_of_locations = ["Country", "City"]
+    alchemy_language = AlchemyLanguageV1(
+        api_key='9a8353fc5871e9ae43c990d25ed6bf281f091ca2')
+    response = (json.dumps(
+        alchemy_language.combined(
+            url=url,
+            extract='entities,keywords',
+            sentiment=1,
+            max_items=1),
+        indent=2))
+    response = json.loads(response)
+    for location_type in list_of_locations:
+        for n, i in enumerate(response['entities']):
+            if i["type"]==location_type and float(i['relevance']) > 0.5:
+                return(i["text"])
+            else:
+                return('No reliable location keywords found.')
 
 
-
-
-
-
-get_header(import_text, url, webpage)
-word_tokenise(import_text)
-
-'''
-#Junk code:
-for headers in soup.find_all("span", {"class": "mw-headline"}):
-    list_of_headers.append(headers.text)
-if list_of_headers == []:
-    print "No headers detected. Switching to general header detection."
-    for headers in soup.find_all("h"):
-        list_of_headers.append(headers.text)
-
-def word_tokenise(text):
-    print(text)
-    print(nltk.pos_tag(text))
-'''
+print(get_country(url))
