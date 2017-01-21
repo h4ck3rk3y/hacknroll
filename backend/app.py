@@ -184,6 +184,37 @@ def remove(idtrip, place):
 	data['id'] = idtrip
 	return jsonify(**data)
 
+# API end to query the status of the analysis
+@app.route('/api/remove/<idtrip>/', methods=["GET"])
+def removetrip(idtrip):
+	trips.remove({'id': idtrip})
+
+	trips_data = trips.find({'user': 'gyani'})
+
+	data = []
+	for trip in trips_data:
+		actual_trip = trip['trip']
+		trip_cities = []
+		image = actual_trip['places_list'][0]['photo']
+		for place in actual_trip['places_list']:
+			trip_cities.append(place['city'])
+
+		trip_title = 'Trip to %s and %d other cities'%(', '.join(trip_cities[:min(4, len(trip_cities))]), len(trip_cities) -min(4,len(trip_cities)))
+		creadedat = "21-01-2017 at 23:00:00"
+		if 'createdat' in trip:
+			creadedat = trip["createdat"]
+
+		data.append({'title': trip_title, 'link': '/result/%s' %(trip['id']), 'createdat': creadedat, 'photo': image, 'id': trip['id']})
+
+
+
+
+	response = {}
+	response['data']  = data
+	response['status'] = 'success'
+
+	return jsonify(**response)
+
 @app.route('/api/mytrips', methods=["GET"])
 def mytrips():
 	data = []

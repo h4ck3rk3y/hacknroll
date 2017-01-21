@@ -121,11 +121,19 @@ function SearchController($scope, Search, $window, $timeout){
 
 }
 
-function TripController($scope, Trip)
+function TripController($scope, Trip, Remove)
 {
     var trips = Trip.get({}, function(data){
         $scope.data = data;
     })
+
+    $scope.removetrip = function(id) {
+        Remove.get({'id':id}, function(data){
+            $scope.data = data;
+        });
+    }
+
+
 }
 
 function ResultController($scope, $routeParams, $timeout, Result, Remove)
