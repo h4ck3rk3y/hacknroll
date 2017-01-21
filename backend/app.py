@@ -17,7 +17,7 @@ import random
 
 NUMER_OF_QUEUES = 8
 
-queues = [Queue(str('r' + i), connection=Redis()) for i in range(8)]
+queues = [Queue('r' + str(i), connection=Redis()) for i in range(8)]
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
