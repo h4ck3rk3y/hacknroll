@@ -105,6 +105,15 @@ def favicon():
 # API end to query the status of the analysis
 @app.route('/api/result/<queue_id>', methods=["GET"])
 def result(queue_id):
+	trip = trips.find_one({'id': queue_id})
+	if trip:
+		trip = trips.find_one({'id': queue_id})
+		data = {}
+		data['status'] = 'success'
+		data['trip'] = trip['trip']
+		data['id'] = queue_id
+		return jsonify(**data)
+
 	try:
 		job = Job.fetch(queue_id, connection=Redis())
 		data = {}
@@ -172,11 +181,65 @@ def add_country():
 	return jsonify(**response)
 
 
+@app.route('/api/addnote/', methods=["POST"])
+def addnote():
+	data = request.get_json(silent=True)
+
+	city = data['city']
+	note = data['note']
+	tripid = data['id']
+
+	trip = trips.find_one({'id': tripid})
+
+	for place in trip['trip']['places_list']:
+		if city == place['city']:
+			if 'notes' in place:
+				place['notes'].append({'text': note})
+			else:
+				place['notes'] = []
+				place['notes'].append({'text': note})
+
+			trips.update({'id':tripid}, trip)
+
+	data = {}
+	data['status'] = 'success'
+	data['trip'] = trip['trip']
+	data['id'] = tripid
+
+
+	return jsonify(**data)
+
+@app.route('/api/removenote/', methods=["POST"])
+def removenote():
+	data = request.get_json(silent=True)
+
+	city = data['city']
+	key = data['key']
+	tripid = data['id']
+
+	trip = trips.find_one({'id': tripid})
+
+	for place in trip['trip']['places_list']:
+		if city == place['city']:
+			place['notes'].pop(int(key))
+			trips.update({'id':tripid}, trip)
+
+	data = {}
+	data['status'] = 'success'
+	data['trip'] = trip['trip']
+	data['id'] = tripid
+
+
+	return jsonify(**data)
+
+
+
+
+
 # API end to query the status of the analysis
 @app.route('/api/remove/<idtrip>/<place>', methods=["GET"])
 def remove(idtrip, place):
 	trip = trips.find_one({'id': idtrip})
-	trip['trip']['places_list']
 	trip['trip']['places_list'].pop(int(place))
 	trips.update({'id': idtrip}, trip)
 	data = {}

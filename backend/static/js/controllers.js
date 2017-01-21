@@ -114,7 +114,7 @@ function SearchController($scope, Search, $window, $timeout){
 
     var timer  = $timeout(tick, 3000);
     $scope.$on("$destroy", function() {
-        if (timer) {
+        if (typeof timer!=='undefined') {
             $timeout.cancel(timer);
         }
     });
@@ -136,7 +136,7 @@ function TripController($scope, Trip, Remove)
 
 }
 
-function ResultController($scope, $routeParams, $timeout, Result, Remove)
+function ResultController($scope, $routeParams, $timeout, Result, Remove, NoteAdd, NoteRemove)
 {
 	var queryResults = Result.get({queue_id: $routeParams.queue_id}, function(data) {
         $scope.data = data;
@@ -159,7 +159,7 @@ function ResultController($scope, $routeParams, $timeout, Result, Remove)
 
     tick();
     $scope.$on("$destroy", function() {
-        if (timer) {
+        if (typeof timer!=='undefined') {
             $timeout.cancel(timer);
         }
     });
@@ -167,6 +167,18 @@ function ResultController($scope, $routeParams, $timeout, Result, Remove)
     $scope.removecity = function(id, key) {
         Remove.get({'id':id, 'number': key}, function(data){
             $scope.data = data;
+        });
+    }
+
+    $scope.addNote = function(note, city, id) {
+        NoteAdd.post({note: note, city: city, id:id}, function(data) {
+            $scope.data= data;
+        });
+    }
+
+    $scope.removeNote = function(id, city, key) {
+        NoteRemove.post({id: id, city: city, key: key}, function(data){
+            $scope.data= data;
         });
     }
 

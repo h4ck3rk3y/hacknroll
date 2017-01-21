@@ -28,10 +28,14 @@
 		<div class="carousel-inner" role="listbox">
 			<div ng-repeat="(key,place) in data.trip.places_list" class="card carousel-item" style="width: 20rem;"  ng-class="{active: $index == 0}">
 
-			<img class="card-img-top" src={{place.photo}} alt="Card image cap" style="width:20rem; height: 10rem;">
+			<img class="card-img-top" ng-src='{{place.photo}}' alt="Card image cap" style="width:20rem; height: 10rem;">
 			  <div class="card-block">
 			    <h4 class="card-title">{{key+1}}. {{place.city}}</h4>
 			    <p class="card-text">{{place.country}}</p>
+			    <p class="card-text">
+			    	Read More
+			    	<a href="http://wikitravel.org/en/{{place.city}}">WikiTravel</a>
+			    </p>
 			  </div>
 			  <ul class="list-group list-group-flush">
 			    <li class="list-group-item">Cost Per Day: {{place.cost_per_day}}</li>
@@ -47,10 +51,21 @@
 
 			  <ul class="list-group list-group-flush" ng-repeat="(key,note) in place.notes">
 			  	<li class="list-group-item">
-			  		<p>Note {{key+1}}</p>
-			  		<p>{{note.text}}</p>
+			  		<p>Note {{key+1}} &nbsp;</p>
+			  		<p>{{note.text}} &nbsp;</p>
 			  		<p><a href={{note.url}}>{{note.url}}</a></p>
+			  		<p>
+		  			<a href="#" ng-click="removeNote(data.id, place.city, key)">Remove</a>
+		  			</p>
 			  	</li>
+			  </ul>
+
+			  <ul class="list-group list-group-flush">
+			  		<li class="list-group-item">
+			  			<textarea ng-model="note"  style="width:20rem; height: 80px;"></textarea>
+			  			<a href="#" ng-click="addNote(note, place.city, data.id)">Add</a>
+			  		</li>
+
 			  </ul>
 			</div>
 			  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">

@@ -32,7 +32,20 @@ angular.module('angularFlaskServices', ['ngResource'])
 			}
 		})
 	})
-
+	.factory('NoteAdd', function($resource){
+		return $resource('/api/addnote/', {}, {
+			post: {
+				method: 'POST',
+			}
+		})
+	})
+	.factory('NoteRemove', function($resource){
+		return $resource('/api/removenote/', {}, {
+			post: {
+				method: 'POST',
+			}
+		})
+	})
 
 ;
 
