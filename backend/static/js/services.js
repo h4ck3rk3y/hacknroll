@@ -23,6 +23,16 @@ angular.module('angularFlaskServices', ['ngResource'])
 			}
 		})
 	})
+	.factory('Remove', function($resource){
+		return $resource('/api/remove/:id/:number', {}, {
+			query : {
+				method: 'GET',
+				params: {"id": "",
+						 "number": ""}
+			}
+		})
+	})
+
 
 ;
 

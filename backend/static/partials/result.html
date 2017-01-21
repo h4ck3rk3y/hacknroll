@@ -37,6 +37,9 @@
 			    <li class="list-group-item">Cost Per Day: {{place.cost_per_day}}</li>
 			    <li class="list-group-item">Spend {{place.duration_of_stay}} days here</li>
 			    <li class="list-group-item">{{place.mode_of_transport}}</li>
+			    <li class="list-group-item">
+			    	<a href="#" ng-click="removecity(data.id,key)">Remove this city</a>
+			    </li>
 			  </ul>
 			  <ul class="list-group list-group-flush" ng-repeat="day in place.places">
 			  	<li class='list-group-item'>{{day}}</li>

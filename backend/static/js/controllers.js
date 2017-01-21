@@ -11,7 +11,10 @@ function waitmessages()
         "Traveling – it leaves you speechless, then turns you into a storyteller",
         "We travel, some of us forever, to seek other places, other lives, other souls.",
         "A journey is best measured in friends, rather than miles.",
-        "The gladdest moment in human life, me thinks, is a departure into unknown lands."
+        "The gladdest moment in human life, me thinks, is a departure into unknown lands.",
+        "I am not the same, having seen the moon shine on the other side of the world.",
+        "The world is a book, and those who do not travel read only one page.",
+        "You don’t have to be rich to travel well."
 	]
 	var quote = securityquotes[Math.floor(Math.random() * securityquotes.length)];
     return quote;
@@ -125,7 +128,7 @@ function TripController($scope, Trip)
     })
 }
 
-function ResultController($scope, $routeParams, $timeout, Result)
+function ResultController($scope, $routeParams, $timeout, Result, Remove)
 {
 	var queryResults = Result.get({queue_id: $routeParams.queue_id}, function(data) {
         $scope.data = data;
@@ -152,4 +155,11 @@ function ResultController($scope, $routeParams, $timeout, Result)
             $timeout.cancel(timer);
         }
     });
+
+    $scope.removecity = function(id, key) {
+        Remove.get({'id':id, 'number': key}, function(data){
+            $scope.data = data;
+        });
+    }
+
 }

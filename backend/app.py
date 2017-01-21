@@ -48,6 +48,8 @@ def make_trip(location, money, country):
 
 	result = trips.insert_one({'user': 'gyani', 'trip': data, 'id': job.get_id(), 'edited': False, 'createdat': dt.now().strftime("%d-%m-%Y at %H:%M:%S")})
 
+	data['id'] = job.get_id()
+
 	return data
 
 
@@ -104,6 +106,7 @@ def result(queue_id):
 		data = {}
 
 		if job.is_finished:
+			data['id'] = job.get_id()
 			data['trip'] = job.result
 			data['status'] = 'success'
 
@@ -126,7 +129,22 @@ def result(queue_id):
 		data = {}
 		data['status'] = 'success'
 		data['trip'] = trip['trip']
+		data['id'] = queue_id
 		return jsonify(**data)
+
+
+# API end to query the status of the analysis
+@app.route('/api/remove/<idtrip>/<place>', methods=["GET"])
+def remove(idtrip, place):
+	trip = trips.find_one({'id': idtrip})
+	trip['trip']['places_list']
+	trip['trip']['places_list'].pop(int(place))
+	trips.update({'id': idtrip}, trip)
+	data = {}
+	data['status'] = 'success'
+	data['trip'] = trip['trip']
+	data['id'] = idtrip
+	return jsonify(**data)
 
 @app.route('/api/mytrips', methods=["GET"])
 def mytrips():
@@ -142,8 +160,8 @@ def mytrips():
 
 		trip_title = 'Trip to %s and %d other cities'%(', '.join(trip_cities[:min(4, len(trip_cities))]), len(trip_cities) -min(4,len(trip_cities)))
 		creadedat = "21-01-2017 at 23:00:00"
-		if 'creadedat' in trip:
-			creadedat = trip["creadedat"]
+		if 'createdat' in trip:
+			creadedat = trip["createdat"]
 
 		data.append({'title': trip_title, 'link': '/result/%s' %(trip['id']), 'createdat': creadedat, 'photo': image})
 
