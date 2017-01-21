@@ -1,12 +1,12 @@
 #usr/bin/bash
 rq resume
-rq worker 1 &
-rq worker 2 &
-rq worker 3 &
-rq worker 4 &
-rq worker 5 &
-rq worker 6 &
-rq worker 7 &
-rq worker 8 &
+rq worker r1 &
+rq worker r2 &
+rq worker r3 &
+rq worker r4 &
+rq worker r5 &
+rq worker r6 &
+rq worker r7 &
+rq worker r8 &
 
-twistd web --wsgi app.app -p 80
+twistd web --wsgi app.app -p 8080

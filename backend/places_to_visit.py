@@ -178,6 +178,7 @@ def go_nearby(starting_city, flew_to, price, visited_cities, job, initial_route=
 
         city, curr_country = getNextCity(present_city.latitude, present_city.longitude, present_city.country, visited_cities)
 
+        job.meta['from'] = present_city.city
         job.meta['current'] = city
         job.meta['phase'] = 'nearby'
         job.save()

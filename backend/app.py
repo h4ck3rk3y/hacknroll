@@ -17,7 +17,7 @@ import random
 
 NUMER_OF_QUEUES = 8
 
-queues = [Queue(str(i), connection=Redis()) for i in range(8)]
+queues = [Queue(str('r' + i), connection=Redis()) for i in range(8)]
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -99,6 +99,8 @@ def result(queue_id):
 		data['current'] = job.meta['current']
 		data['status'] = 'processing'
 		data['phase'] = job.meta['phase']
+		if 'from' in job.meta:
+			data['from'] = job.meta['from']
 
 	return jsonify(**data)
 

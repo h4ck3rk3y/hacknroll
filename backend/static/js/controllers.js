@@ -19,7 +19,7 @@ function waitmessages()
 
 function SearchController($scope, Search, $window, $timeout){
 
-    $scope.position = '1.3521,103.8198';
+    $scope.position = '28.7041,77.1025';
 
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position){
