@@ -48,7 +48,8 @@
 			  <ul class="list-group list-group-flush" ng-repeat="(key,note) in place.notes">
 			  	<li class="list-group-item">
 			  		<p>Note {{key+1}}</p>
-			  		<p>{{note}}</p>
+			  		<p>{{note.text}}</p>
+			  		<p><a href={{note.url}}>{{note.url}}</a></p>
 			  	</li>
 			  </ul>
 			</div>

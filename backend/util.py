@@ -19,37 +19,40 @@ def get_country(url):
     response = json.loads(response)
     data = {}
 
+    relevance = 0
+
     for location_type in list_of_locations:
         for n, i in enumerate(response['entities']):
-            if i["type"]==location_type and float(i['relevance']) > 0.5:
+            if i["type"]==location_type and float(i['relevance']) > relevance:
+                relevance = max(relevance, float(i['relevance']))
                 data[location_type] = (i["text"])
 
     return data
 
 def parse_money(money):
 
-	# handle 5000 USD
-	smoney = money.split(' ')
-	parsed_money = None
-	errors = []
+    # handle 5000 USD
+    smoney = money.split(' ')
+    parsed_money = None
+    errors = []
 
-	# something other than SGD
-	if len(smoney) == 2 and smoney[1]!='USD':
-		url = 'http://api.fixer.io/latest?symbols=%s&base=USD'%smoney[1].upper()
-		response = requests.get(url)
+    # something other than SGD
+    if len(smoney) == 2 and smoney[1]!='USD':
+        url = 'http://api.fixer.io/latest?symbols=%s&base=USD'%smoney[1].upper()
+        response = requests.get(url)
 
-		if response.status_code == 200:
-			response = response.json()
+        if response.status_code == 200:
+            response = response.json()
 
-			if not 'error' in response:
-				parsed_money = float(smoney[0]) / float(response['rates'][smoney[1].upper()])
-			else:
-				errors.append('Couldnt convert the currency')
-				parsed_money = float(smoney[0])
-	else:
-		parsed_money = float(smoney[0])
+            if not 'error' in response:
+                parsed_money = float(smoney[0]) / float(response['rates'][smoney[1].upper()])
+            else:
+                errors.append('Couldnt convert the currency')
+                parsed_money = float(smoney[0])
+    else:
+        parsed_money = float(smoney[0])
 
-	return parsed_money, errors
+    return parsed_money, errors
 
 countries = {0: u'Argentina',
  1: u'Australia',

@@ -162,11 +162,13 @@ def add_country():
 		for place in trip['trip']['places_list']:
 			if place['city'] == results['City']:
 				if 'notes' in place:
-					place['notes'].append(text)
+					place['notes'].append({'text':text, 'url': url})
 				else:
 					place['notes'] = []
-					place['notes'].append(text)
+					place['notes'].append({'text':text, 'url': url})
 				trips.update({'id': trip['id']}, trip)
+
+	print response
 
 	return jsonify(**response)
 
