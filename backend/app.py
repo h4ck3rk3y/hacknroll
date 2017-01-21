@@ -168,7 +168,6 @@ def add_country():
 					place['notes'].append({'text':text, 'url': url})
 				trips.update({'id': trip['id']}, trip)
 
-	print response
 
 	return jsonify(**response)
 
