@@ -17,9 +17,75 @@ function waitmessages()
     return quote;
 }
 
+function travelPics()
+{
+    var pics = [
+        "/static/img/patagonia.jpg",
+        "/static/img/stone.jpg",
+        "/static/img/budapest.jpg",
+        "/static/img/singapore.jpg",
+        "/static/img/brazil.jpg",
+        "/static/img/india.jpg",
+    ];
+    var pic = pics[Math.floor(Math.random() * pics.length)];
+    return pic;
+}
+
 function SearchController($scope, Search, $window, $timeout){
 
     $scope.position = '28.7041,77.1025';
+
+    $scope.countries = [
+        "Canada",
+        "Turkey",
+        "Italy",
+        "Czech Republic",
+        "Hungary",
+        "Luxembourg",
+        "France",
+        "Slovakia",
+        "Ireland",
+        "Argentina",
+        "Norway",
+        "Bahrain",
+        "Saudi Arabia",
+        "Australia",
+        "Singapore",
+        "Iceland",
+        "Czechia",
+        "China",
+        "Belgium",
+        "Germany",
+        "Hong Kong",
+        "Taiwan",
+        "Spain",
+        "Netherlands",
+        "Denmark",
+        "Poland",
+        "Finland",
+        "Israel",
+        "United States",
+        "Morocco",
+        "Sweden",
+        "Croatia",
+        "Thailand",
+        "Switzerland",
+        "Russia",
+        "Brazil",
+        "Portugal",
+        "Estonia",
+        "Mexico",
+        "Egypt",
+        "United Arab Emirates",
+        "South Africa",
+        "India",
+        "United Kingdom",
+        "Malaysia",
+        "Austria",
+        "Japan",
+        "South Korea"
+    ];
+    $scope.countries.sort()
 
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position){
@@ -29,11 +95,27 @@ function SearchController($scope, Search, $window, $timeout){
         });
     }
 
-    $scope.go_places = function(money) {
-		Search.post({money: money, location: $scope.position}, function(data) {
+    $scope.bymoney = function(money) {
+		Search.post({money: money, location: $scope.position, country: country}, function(data) {
 			$window.location = '/result/' + data.id;
 		});
     }
+
+    tick();
+
+    function tick() {
+        $scope.image = travelPics();
+        var timer  = $timeout(tick, 3000);
+    }
+
+
+    var timer  = $timeout(tick, 3000);
+    $scope.$on("$destroy", function() {
+        if (timer) {
+            $timeout.cancel(timer);
+        }
+    });
+
 }
 
 function ResultController($scope, $routeParams, $timeout, Result)

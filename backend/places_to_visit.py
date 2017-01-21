@@ -181,6 +181,7 @@ def go_nearby(starting_city, flew_to, price, visited_cities, job, initial_route=
         job.meta['from'] = present_city.city
         job.meta['current'] = city
         job.meta['phase'] = 'nearby'
+        job.meta['money-left'] = price
         job.save()
 
         if city is None:
@@ -294,6 +295,7 @@ def pick_cities(origin, price, job):
 
         job.meta['current'] = city
         job.meta['phase'] = 'first-city'
+        job.meta['money-left'] = price
         job.save()
 
         if country == origin_object.country or city in done_cities:

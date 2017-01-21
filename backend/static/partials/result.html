@@ -2,6 +2,7 @@
 	<div ng-show="data.status == 'processing'">
 		<h1>Making your trip....!</h1>
 		<h1>{{quote}}</h1>
+		<h1>Left with {{data.money}}</h1>
 		<h1>Trying.. {{data.current}}</h1>
 	</div>
 </div>
@@ -21,32 +22,19 @@
 	</div>
 </div>
 
-
 <div ng-show="data.status == 'success'">
-	<div ng-repeat="(filename, report) in data.report">
-		<h3>Filename: {{filename}}</h3>
-		<div ng-show="report.error">
-			<h4>Error: {{report.error}}</h4>
-			<h5>Commit Hash: {{report.commit}}</h5>
-		</div>
-		<div ng-repeat="(commitid, issues) in report.commits">
-			<h5>Commit Hash: {{commitid}}</h5>
-			<table style="width:100%">
-				<tr>
-					<th>Issue</th>
-					<th>Confidence</th>
-					<th>Severity</th>
-					<th>Location</th>
-					<th>Description</th>
-				</tr>
-				<tr ng-repeat="issue in issues">
-					<td>{{issue.issue}}</td>
-					<td>{{issue.confidence}}</td>
-					<td>{{issue.severity}}</td>
-					<td>{{issue.location}}</td>
-					<td>{{issue.text}}</td>
-				</tr>
-			</table>
+	<h3>{{data.trip.origin}}</h3>
+	<div ng-repeat="place in data.trip.places_list">
+			<h3>{{place.country}}</h3>
+			<h3>{{place.city}}</h3>
+			<h3>{{place.cost_per_day}}</h3>
+			<h3>{{place.duration_of_stay}}</h3>
+			<h3>{{place.mode_of_transport}}</h3>
+			<img>{{place.photo}}</img>
+			<div ng-repeat="day in place.places">
+				<h3>{{day}}</h3>
+			</div>
+			<h3>{{place.price_of_travel}}</h3>
 		</div>
 	</div>
 </div>

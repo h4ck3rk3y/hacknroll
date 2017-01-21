@@ -22,7 +22,11 @@ queues = [Queue('r' + str(i), connection=Redis()) for i in range(8)]
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
-def make_trip(location, money):
+qid=-1
+
+def make_trip(location, money, country):
+	money, errors = parse_money(money)
+
 	job = get_current_job()
 
 	price, first_dest, route = pick_cities(location, float(money), job)
@@ -53,21 +57,26 @@ def basic_pages(**kwargs):
 # API end that takes in the GitHub url for processing
 @app.route("/api/maketrip/", methods=["POST"])
 def analyzer_api():
+	global qid
 	request_data = request.get_json(silent=True)
 	if request_data and 'money' in request_data and 'location' in request_data:
 		money = request_data['money']
 		location = request_data['location']
-		money, errors = parse_money(money)
 
-		q = random.choice(queues)
-		job = q.enqueue_call(func = 'app.make_trip', args=(location, money,), result_ttl=5000, ttl=10000, timeout=10000)
+		country = None
+		if 'country' in request_data and request['country']:
+			country = countries[request_data['country']]
+
+		q = queues[(qid+1)%9]
+		qid+=1
+		job = q.enqueue_call(func = 'app.make_trip', args=(location, money, country), result_ttl=5000, ttl=10000, timeout=10000)
 		job.meta['current'] = 'Just Started'
 		job.meta['phase'] = 'started'
+		job.meta['money-left'] = money
 		job.save()
 		data = {}
 		data['location'] = location
 		data['money'] = money
-		data['errors'] = errors
 		data['id'] = job.get_id()
 		data['status'] = 'making-trip'
 
@@ -99,6 +108,7 @@ def result(queue_id):
 		data['current'] = job.meta['current']
 		data['status'] = 'processing'
 		data['phase'] = job.meta['phase']
+		data['money'] = job.meta['money-left']
 		if 'from' in job.meta:
 			data['from'] = job.meta['from']
 
