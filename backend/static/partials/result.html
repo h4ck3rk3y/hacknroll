@@ -44,6 +44,13 @@
 			  <ul class="list-group list-group-flush" ng-repeat="day in place.places">
 			  	<li class='list-group-item'>{{day}}</li>
 			  </ul>
+
+			  <ul class="list-group list-group-flush" ng-repeat="(key,note) in place.notes">
+			  	<li class="list-group-item">
+			  		<p>Note {{key+1}}</p>
+			  		<p>{{note}}</p>
+			  	</li>
+			  </ul>
 			</div>
 			  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>

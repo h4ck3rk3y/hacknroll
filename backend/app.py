@@ -14,6 +14,8 @@ from rq import get_current_job
 from redis import Redis
 
 from datetime import datetime as dt
+from flask_cors import CORS, cross_origin
+
 
 import random
 
@@ -23,6 +25,8 @@ queues = [Queue('r' + str(i), connection=Redis()) for i in range(8)]
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+CORS(app)
+
 
 qid=-1
 
@@ -132,6 +136,40 @@ def result(queue_id):
 		data['id'] = queue_id
 		return jsonify(**data)
 
+@app.route('/api/add/', methods=["POST"])
+def add_country():
+	data = request.get_json(silent=True)
+
+	url = data['url']
+	text = data['text']
+
+	results = get_country(url)
+
+	response = {}
+	response['status'] = 'success'
+	response['url'] = url
+	response['text'] = text
+	response['city'] = results['City']
+
+	if 'Country' in results:
+		response['country'] = results['Country']
+	else:
+		response['country'] = results['City']
+
+	relevant_trips = trips.find({'trip.places_list.city': results['City']})
+
+	for trip in relevant_trips:
+		for place in trip['trip']['places_list']:
+			if place['city'] == results['City']:
+				if 'notes' in place:
+					place['notes'].append(text)
+				else:
+					place['notes'] = []
+					place['notes'].append(text)
+				trips.update({'id': trip['id']}, trip)
+
+	return jsonify(**response)
+
 
 # API end to query the status of the analysis
 @app.route('/api/remove/<idtrip>/<place>', methods=["GET"])
@@ -163,7 +201,7 @@ def mytrips():
 		if 'createdat' in trip:
 			creadedat = trip["createdat"]
 
-		data.append({'title': trip_title, 'link': '/result/%s' %(trip['id']), 'createdat': creadedat, 'photo': image})
+		data.append({'title': trip_title, 'link': '/result/%s' %(trip['id']), 'createdat': creadedat, 'photo': image, 'id': trip['id']})
 
 	response = {}
 	response['data']  = data
