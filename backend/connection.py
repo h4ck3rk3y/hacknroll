@@ -8,3 +8,5 @@ gplaces = routerush.gplaces
 gphotos = routerush.gphotos
 route_rome = routerush.rome2rio
 geo = routerush.geo
+
+trips = routerush.trips

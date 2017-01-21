@@ -92,7 +92,7 @@ function SearchController($scope, Search, $window, $timeout){
           $scope.$apply(function(){
             $scope.position = position.coords.latitude + "," +  position.coords.longitude;
           });
-        });
+        });-
     }
 
     $scope.bymoney = function(money, country) {

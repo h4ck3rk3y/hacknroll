@@ -38,12 +38,15 @@ def make_trip(location, money, country):
 	places = go_nearby(parsed_location[0], location_flight, price, [], job, country, route)
 	nearest_airport =dst_iata = getNearestAirport(parsed_location.latitude, parsed_location.longitude)['iata']
 
-	return {
+	data =  {
 		'places_list': places[:-1],
 		'origin': parsed_location.city,
 		'return_trip': places[-1]
 	}
 
+	trips.insert_one({'user': 'gyani', 'trip': trip})
+
+	return data
 
 
 # A function to serve basic webpages
