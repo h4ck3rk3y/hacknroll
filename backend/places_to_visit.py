@@ -41,6 +41,8 @@ def getDays(city,country, budget):
         status = response.status_code
         data = response.json()
         gplaces.insert({'city':city, 'country': country, 'results': response.json()['results']})
+
+
     photo = False
     allowed = ["point_of_interest", "establishment", "natural_feature", "museum", "amusement_park", "aquarium", "church", "hindu_temple", "mosque", "casino", "city_hall", "place_of_worship", "synagogue", "shopping_mall"]
     places = []
