@@ -1,5 +1,6 @@
 
-<div ng-show="data.status == 'success'">
+<div ng-show="data.status == 'success'" align="center">
+<h1><font color="white">Your Trip History</font></h1>
 <div  class="carousel slide" data-ride="carousel" id="carouselExampleIndicators" style="width: 500px; margin: 0 auto" align="center">
 		<div class="carousel-inner" role="listbox">
 			<div ng-repeat="(key,trip) in data.data" class="card carousel-item" style="width: 20rem;"  ng-class="{active: $index == 0}">
