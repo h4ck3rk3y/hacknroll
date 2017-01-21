@@ -92,7 +92,7 @@ function SearchController($scope, Search, $window, $timeout){
           $scope.$apply(function(){
             $scope.position = position.coords.latitude + "," +  position.coords.longitude;
           });
-        });-
+        });
     }
 
     $scope.bymoney = function(money, country) {
@@ -118,6 +118,13 @@ function SearchController($scope, Search, $window, $timeout){
 
 }
 
+function TripController($scope, Trip)
+{
+    var trips = Trip.get({}, function(data){
+        $scope.data = data;
+    })
+}
+
 function ResultController($scope, $routeParams, $timeout, Result)
 {
 	var queryResults = Result.get({queue_id: $routeParams.queue_id}, function(data) {
@@ -126,17 +133,20 @@ function ResultController($scope, $routeParams, $timeout, Result)
 
     function tick() {
         $scope.quote = waitmessages();
+
         var queryResults = Result.get({queue_id: $routeParams.queue_id}, function(data) {
             $scope.data = data;
-            if ($scope.data.status!='inprocess')
+            if ($scope.data.status=='success')
             {
                 $timeout.cancel(timer);
             }
-            var timer  = $timeout(tick, 3000);
+            else{
+                var timer  = $timeout(tick, 3000);
+            }
         });
     }
 
-    var timer  = $timeout(tick, 3000);
+    tick();
     $scope.$on("$destroy", function() {
         if (timer) {
             $timeout.cancel(timer);

@@ -12,8 +12,9 @@ angular.module('AngularFlask', ['angularFlaskServices'])
 			templateUrl: '/static/partials/result.html',
 			controller: ResultController
 		})
-		.when('/about', {
-			templateUrl: '/static/partials/about.html',
+		.when('/mytrips', {
+			templateUrl: '/static/partials/trips.html',
+			controller: TripController
 		})
 		.otherwise({
 			redirectTo: '/'

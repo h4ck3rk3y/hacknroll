@@ -1,9 +1,9 @@
 <div align="center" class="container-fluid">
 	<div ng-show="data.status == 'processing'">
-		<h1>Making your trip....!</h1>
-		<h1>{{quote}}</h1>
-		<h1>Left with {{data.money}}</h1>
-		<h1>Trying.. {{data.current}}</h1>
+		<h1><font color="white">Making your trip....!</font></h1>
+		<h1><font color="white">{{quote}}</font></h1>
+		<h1><font color="white">Left with {{data.money}}</font></h1>
+		<h1><font color="white">Trying.. {{data.current}}</font></h1>
 	</div>
 </div>
 
@@ -23,19 +23,34 @@
 </div>
 
 <div ng-show="data.status == 'success'">
-	<h3>{{data.trip.origin}}</h3>
-	<div ng-repeat="place in data.trip.places_list">
-			<h3>{{place.country}}</h3>
-			<h3>{{place.city}}</h3>
-			<h3>{{place.cost_per_day}}</h3>
-			<h3>{{place.duration_of_stay}}</h3>
-			<h3>{{place.mode_of_transport}}</h3>
-			<img>{{place.photo}}</img>
-			<div ng-repeat="day in place.places">
-				<h3>{{day}}</h3>
+<h1 align="center"><font color="white">Your ordered itenirary</font></h1>
+<div  class="carousel slide" data-ride="carousel" id="carouselExampleIndicators" style="width: 500px; margin: 0 auto" align="center">
+		<div class="carousel-inner" role="listbox">
+			<div ng-repeat="(key,place) in data.trip.places_list" class="card carousel-item" style="width: 20rem;"  ng-class="{active: $index == 0}">
+
+			<img class="card-img-top" src={{place.photo}} alt="Card image cap" style="width:20rem; height: 10rem;">
+			  <div class="card-block">
+			    <h4 class="card-title">{{key+1}}. {{place.city}}</h4>
+			    <p class="card-text">{{place.country}}</p>
+			  </div>
+			  <ul class="list-group list-group-flush">
+			    <li class="list-group-item">Cost Per Day: {{place.cost_per_day}}</li>
+			    <li class="list-group-item">Spend {{place.duration_of_stay}} days here</li>
+			    <li class="list-group-item">{{place.mode_of_transport}}</li>
+			  </ul>
+			  <ul class="list-group list-group-flush" ng-repeat="day in place.places">
+			  	<li class='list-group-item'>{{day}}</li>
+			  </ul>
 			</div>
-			<h3>{{place.price_of_travel}}</h3>
+			  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
 		</div>
-	</div>
 </div>
 
+</div>

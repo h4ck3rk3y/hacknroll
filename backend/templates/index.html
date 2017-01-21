@@ -14,25 +14,22 @@
  	<script src="/static/js/services.js"></script>
  	<script src="/static/js/filters.js"></script>
 
+ 	<script src="/static/lib/tether/tether.min.js"></script>
 	<script src="/static/lib/jquery/jquery.min.js"></script>
 	<script src="/static/lib/bootstrap/bootstrap.min.js"></script>
 
 </head>
-<body>
-	<div id="header" class="header navbar navbar-static-top">
-		<div class="navbar">
-			<div class="container-fluid">
-				<div class="navbar-header">
-					<a class="navbar-brand" href="/">RouteRush</a>
-				</div>
-				<ul class="nav navbar-nav pull-right">
-				  <li><a href="#">Hi Gyani!</a></li>
-				  <li class="active"><a href="/">Home</a></li>
-				  <li><a href="/mytrips">My Trips</a></li>
-			    </ul>
-    		</div>
-		</div>
-	</div>
+<body style="background-color: #171120;">
+	<nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+		<a class="navbar-brand" href="/">RouteRush</a>
+		<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+			<ul class="navbar-nav mr-auto mt-2 mt-md-0 pull-right">
+			  <li class="nav-item"><a class="nav-link" href="#">Hi Gyani!</a></li>
+			  <li class="nav-item active"><a class="nav-link" href="/">Home</a></li>
+			  <li class="nav-item"><a class="nav-link" href="/mytrips">My Trips</a></li>
+		    </ul>
+	    </div>
+	</nav>
 	<div class="container page">
 		<div id="content" class="container main" ng-view>
 

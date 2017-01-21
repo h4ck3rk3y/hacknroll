@@ -16,6 +16,14 @@ angular.module('angularFlaskServices', ['ngResource'])
 			}
 		})
 	})
+	.factory('Trip', function($resource){
+		return $resource('/api/mytrips', {}, {
+			query : {
+				method: 'GET',
+			}
+		})
+	})
+
 ;
 
 

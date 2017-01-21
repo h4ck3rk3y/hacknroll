@@ -13,6 +13,8 @@ from rq.job import Job
 from rq import get_current_job
 from redis import Redis
 
+from datetime import datetime as dt
+
 import random
 
 NUMER_OF_QUEUES = 8
@@ -44,7 +46,7 @@ def make_trip(location, money, country):
 		'return_trip': places[-1]
 	}
 
-	trips.insert_one({'user': 'gyani', 'trip': trip})
+	result = trips.insert_one({'user': 'gyani', 'trip': data, 'id': job.get_id(), 'edited': False, 'createdat': dt.now().strftime("%d-%m-%Y at %H:%M:%S")})
 
 	return data
 
@@ -54,6 +56,7 @@ def make_trip(location, money, country):
 @app.route('/result/<queue_id>')
 @app.route('/wait')
 @app.route('/about')
+@app.route('/mytrips')
 def basic_pages(**kwargs):
 	return make_response(open('templates/index.html').read())
 
@@ -70,7 +73,7 @@ def analyzer_api():
 		if 'country' in request_data and request_data['country']:
 			country = request_data['country']
 
-		q = queues[(qid+1)%9]
+		q = queues[((qid+1)%8)+1]
 		qid+=1
 		job = q.enqueue_call(func = 'app.make_trip', args=(location, money, country), result_ttl=5000, ttl=10000, timeout=10000)
 		job.meta['current'] = 'Just Started'
@@ -96,27 +99,59 @@ def favicon():
 # API end to query the status of the analysis
 @app.route('/api/result/<queue_id>', methods=["GET"])
 def result(queue_id):
-	job = Job.fetch(queue_id, connection=Redis())
-	data = {}
+	try:
+		job = Job.fetch(queue_id, connection=Redis())
+		data = {}
 
-	if job.is_finished:
-		data['trip'] = job.result
+		if job.is_finished:
+			data['trip'] = job.result
+			data['status'] = 'success'
+
+		elif job.is_failed:
+			data['status'] = 'error'
+
+		elif job.is_queued:
+			data['status'] = 'queued'
+		else:
+			data['current'] = job.meta['current']
+			data['status'] = 'processing'
+			data['phase'] = job.meta['phase']
+			data['money'] = job.meta['money-left']
+			if 'from' in job.meta:
+				data['from'] = job.meta['from']
+
+		return jsonify(**data)
+	except:
+		trip = trips.find_one({'id': queue_id})
+		data = {}
 		data['status'] = 'success'
+		data['trip'] = trip['trip']
+		return jsonify(**data)
 
-	elif job.is_failed:
-		data['status'] = 'error'
+@app.route('/api/mytrips', methods=["GET"])
+def mytrips():
+	data = []
+	trips_data = trips.find({'user': 'gyani'})
 
-	elif job.is_queued:
-		data['status'] = 'queued'
-	else:
-		data['current'] = job.meta['current']
-		data['status'] = 'processing'
-		data['phase'] = job.meta['phase']
-		data['money'] = job.meta['money-left']
-		if 'from' in job.meta:
-			data['from'] = job.meta['from']
+	for trip in trips_data:
+		actual_trip = trip['trip']
+		trip_cities = []
+		image = actual_trip['places_list'][0]['photo']
+		for place in actual_trip['places_list']:
+			trip_cities.append(place['city'])
 
-	return jsonify(**data)
+		trip_title = 'Trip to %s and %d other cities'%(', '.join(trip_cities[:min(4, len(trip_cities))]), len(trip_cities) -min(4,len(trip_cities)))
+		creadedat = "21-01-2017 at 23:00:00"
+		if 'creadedat' in trip:
+			creadedat = trip["creadedat"]
+
+		data.append({'title': trip_title, 'link': '/result/%s' %(trip['id']), 'createdat': creadedat, 'photo': image})
+
+	response = {}
+	response['data']  = data
+	response['status'] = 'success'
+
+	return jsonify(**response)
 
 @app.errorhandler(404)
 def not_found(e):
