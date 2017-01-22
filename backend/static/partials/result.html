@@ -55,8 +55,17 @@
 			  		<p>{{note.text}} &nbsp;</p>
 			  		<p><a href={{note.url}}>{{note.url}}</a></p>
 			  		<p>
-		  			<a href="#" ng-click="removeNote(data.id, place.city, key)">Remove</a>
+		  			<a href="#" ng-click="removeNote(data.id, place.city, key)">&nbsp;Remove</a>
 		  			</p>
+			  	</li>
+			  </ul>
+
+			  <ul class="list-group list-group-flush" ng-repeat="(key,info) in place.parsed">
+			  	<li class="list-group-item">
+			  		<p>{{info.key}}&nbsp;</p>
+			  		<p>{{info.intent}}&nbsp;</p>
+			  		<p>{{info.unit}}&nbsp;</p>
+		  			<p>{{info.value}}&nbsp;</p>
 			  	</li>
 			  </ul>
 

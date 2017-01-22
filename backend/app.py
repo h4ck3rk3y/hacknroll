@@ -79,7 +79,7 @@ def analyzer_api():
 		if 'country' in request_data and request_data['country']:
 			country = request_data['country']
 
-		q = queues[((qid+1)%8)+1]
+		q = queues[((qid+1)%7)+1]
 		qid+=1
 		job = q.enqueue_call(func = 'app.make_trip', args=(location, money, country), result_ttl=5000, ttl=10000, timeout=10000)
 		job.meta['current'] = 'Just Started'
@@ -153,6 +153,7 @@ def add_country():
 	text = data['text']
 
 	results = get_country(url)
+	parsed_text = get_context(text)
 
 	response = {}
 	response['status'] = 'success'
@@ -175,6 +176,10 @@ def add_country():
 				else:
 					place['notes'] = []
 					place['notes'].append({'text':text, 'url': url})
+
+				if parsed_text:
+					place['parsed'] = parsed_text
+
 				trips.update({'id': trip['id']}, trip)
 
 

@@ -5,6 +5,33 @@ import json
 from watson_developer_cloud import AlchemyLanguageV1
 
 
+#replace this with global variable
+
+# A function that parses the information passed from the extension.
+def get_context(text):
+    url = 'https://api.wit.ai/message'
+    params = {'q':text, 'v': '20170122'}
+    r = requests.get(url, params=params, headers={'Authorization': 'Bearer 7WXLSZVVS35BHYSORSJQASAEH7GNLKFI'})
+    response = r.json()
+
+
+    if not 'outcomes' in response:
+        return
+
+    result = []
+
+    for outcome in response['outcomes']:
+        entities = outcome.get('entities', {})
+        for key, value in entities.items():
+            for val in value:
+                if 'value' in val:
+                    result.append({'key': key, 'value': val['value'], 'unit': val.get('unit', None), 'intent': outcome['intent']})
+                elif '_text' in val:
+                    result.append({'key': key, 'value': val['_text'], 'unit': val.get('unit', None), 'intent': outcome['intent']})
+
+    return result
+
+
 def get_country(url):
     list_of_locations = ["Country", "City"]
     alchemy_language = AlchemyLanguageV1(
