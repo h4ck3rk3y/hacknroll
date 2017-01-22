@@ -14,7 +14,6 @@ def get_context(text):
     r = requests.get(url, params=params, headers={'Authorization': 'Bearer 7WXLSZVVS35BHYSORSJQASAEH7GNLKFI'})
     response = r.json()
 
-
     if not 'outcomes' in response:
         return
 

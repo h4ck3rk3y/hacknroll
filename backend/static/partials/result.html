@@ -2,7 +2,7 @@
 	<div ng-show="data.status == 'processing'">
 		<h1><font color="white">Making your trip....!</font></h1>
 		<h1><font color="white">{{quote}}</font></h1>
-		<h1><font color="white">Left with {{data.money}}</font></h1>
+		<h1><font color="white">Left with {{data.money| number: 2}}</font></h1>
 		<h1><font color="white">Trying.. {{data.current}}</font></h1>
 	</div>
 </div>
